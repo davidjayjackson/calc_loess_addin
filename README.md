@@ -25,19 +25,28 @@ directly: the exact same code resolved fine once moved into a genuine Add-In,
 and never appeared in the Function Wizard as a Basic macro, no matter how it
 was packaged.)
 
-Building the Add-In requires the LibreOffice **SDK** (for `unoidl-write`,
-which compiles the IDL interface in `idl/com/example/loess/XLoess.idl` into a
-UNO type library - no C++/Java compiler needed, just the SDK tool) and
-Python. Check `<LibreOffice install dir>/sdk/bin/unoidl-write` exists; on this
-machine that's `/usr/lib64/libreoffice/sdk/bin/unoidl-write`.
+The easiest way to install it is to download the pre-built `CalcLoessAddin.oxt`
+from the [latest release](https://github.com/davidjayjackson/calc_loess_addin/releases/latest)
+and add it directly - no LibreOffice SDK needed for this path:
+
+```sh
+unopkg add --force CalcLoessAddin.oxt
+```
+
+To build it yourself from source instead, you'll need the LibreOffice **SDK**
+(for `unoidl-write`, which compiles the IDL interface in
+`idl/com/example/loess/XLoess.idl` into a UNO type library - no C++/Java
+compiler needed, just the SDK tool) and Python. Check
+`<LibreOffice install dir>/sdk/bin/unoidl-write` exists; on this machine
+that's `/usr/lib64/libreoffice/sdk/bin/unoidl-write`.
 
 ```sh
 ./build_addin.sh                                    # -> build/CalcLoessAddin.oxt
 unopkg add --force build/CalcLoessAddin.oxt         # install
 ```
 
-Restart LibreOffice, then `=LOESS(...)` autocompletes and shows full argument
-help in the Function Wizard (category "Add-In").
+Either way, restart LibreOffice, then `=LOESS(...)` autocompletes and shows
+full argument help in the Function Wizard (category "Add-In").
 
 Remove with `unopkg remove com.example.loess`.
 
