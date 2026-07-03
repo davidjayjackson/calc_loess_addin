@@ -49,8 +49,8 @@ is never searched when compiling a cell formula, so `=LOESS(...)` fails with
 `#NAME?` no matter what. This was verified directly (not assumed): the exact
 same code resolves correctly the moment it's placed in the personal Standard
 library, and fails every time it's shipped via `.oxt`, independent of the
-library's name. See `oxt/`, `build_oxt.sh` and the committed `CalcLoessAddin.oxt`
-for that dead-end version, kept for reference.
+library's name. (That dead-end `.oxt`-wrapped-Basic version was tried and
+removed from this repo once the real Add-In below existed.)
 
 Once installed, run **Tools > Macros > Run Macro... > My Macros > Standard >
 LOESSSelfTest > RunSelfTest** to sanity check it - it opens a scratch
@@ -160,10 +160,6 @@ src/SelfTest.bas    Interactive self-test (Tools > Macros > Run Macro > RunSelfT
 install.sh          Installs src/*.bas into your personal Standard library (Option A).
 examples/LOESS_Demo.ods
                     Sample workbook - see Usage above.
-oxt/, build_oxt.sh, CalcLoessAddin.oxt
-                    The original .oxt-wrapped-Basic dead end, kept for
-                    reference - installs and is runnable as a macro, but
-                    =LOESS(...) as a cell formula does NOT work from it.
 idl/com/example/loess/XLoess.idl
                     UNO interface for the Python Add-In (Option B).
 src/loess_impl.py   Python port of LOESS.bas implementing that interface.
