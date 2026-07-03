@@ -74,6 +74,8 @@ sample noisy data with a deliberate outlier, `LOESS()` dragged down two
 columns (degree 1 and 2), a robust-vs-non-robust comparison at the outlier,
 and a chart.
 
+![Example workbook: LOESS-smoothed columns next to a chart comparing the raw noisy data against the degree-1 and degree-2 fits, including the spike from the deliberate outlier](docs/LOESS_Demo_screenshot.png)
+
 ## Performance
 
 `RobustIters > 0` is O(n²) per formula evaluation, because deriving the
