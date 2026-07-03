@@ -3,7 +3,7 @@
     xmlns="http://openoffice.org/extensions/description/2006"
     xmlns:xlink="http://www.w3.org/1999/xlink">
   <identifier value="com.example.loess"/>
-  <version value="2.0.0"/>
+  <version value="2.0.1"/>
   <display-name>
     <name lang="en">LOESS Calc Add-In</name>
   </display-name>

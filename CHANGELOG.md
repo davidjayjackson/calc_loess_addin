@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.1] - 2026-07-03
+
+### Documentation
+- Populated `CLAUDE.md` (previously an empty placeholder) with build/test
+  commands and the IDL-to-Python-AddIn architecture notes, for future work
+  in this repo. No functional changes.
+
 ## [2.0.0] - 2026-07-03
 
 ### Added
@@ -45,6 +52,7 @@ polynomial regression smoothing, implemented in pure StarBasic.
 - `examples/LOESS_Demo.ods`, a worked example workbook with a chart.
 - README documenting usage, algorithm, and performance characteristics.
 
-[Unreleased]: https://github.com/davidjayjackson/calc_loess_addin/compare/v2.0.0...HEAD
+[Unreleased]: https://github.com/davidjayjackson/calc_loess_addin/compare/v2.0.1...HEAD
+[2.0.1]: https://github.com/davidjayjackson/calc_loess_addin/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/davidjayjackson/calc_loess_addin/compare/v1.0.0...v2.0.0
 [1.0.0]: https://github.com/davidjayjackson/calc_loess_addin/releases/tag/v1.0.0
