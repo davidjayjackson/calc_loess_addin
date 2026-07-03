@@ -113,6 +113,10 @@ examples/LOESS_Demo.ods
                     Sample workbook - see Usage above.
 ```
 
+## Changelog
+
+Release history is in [CHANGELOG.md](CHANGELOG.md).
+
 ## Testing notes
 
 The algorithm was cross-checked against an independent NumPy reference
