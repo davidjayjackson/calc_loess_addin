@@ -26,7 +26,7 @@ and never appeared in the Function Wizard as a Basic macro, no matter how it
 was packaged.)
 
 The easiest way to install it is to download the pre-built `CalcLoessAddin.oxt`
-from the [latest release](https://github.com/davidjayjackson/calc_loess_addin/releases/latest)
+from the [v2.0.1 release](https://github.com/davidjayjackson/calc_loess_addin/releases/tag/v2.0.1)
 and add it directly - no LibreOffice SDK needed for this path:
 
 ```sh
