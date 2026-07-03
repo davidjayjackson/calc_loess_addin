@@ -4,9 +4,7 @@ Objective is to create addin for Calc calculate loess or lowess without using py
 
 A LOESS/LOWESS (locally weighted polynomial regression) smoothing function for
 LibreOffice Calc, implemented entirely in LibreOffice Basic (StarBasic). No
-Python, no external libraries, no compiler - just a Basic module you can
-import directly, or an extension (`.oxt`) you can install through the
-Extension Manager.
+Python, no external libraries, no compiler - just a Basic module.
 
 ## What it does
 
@@ -17,26 +15,33 @@ outliers. This is the same family of algorithm as R's `lowess()`/`loess()`.
 
 ## Installation
 
-### Option A: Install the extension (recommended)
+Run `./install.sh`. It copies `src/LOESS.bas` and `src/SelfTest.bas` into your
+personal LibreOffice **Standard** Basic library
+(`~/.config/libreoffice/4/user/basic/Standard`) as two new modules
+(`LOESSAddin`, `LOESSSelfTest`), backing up your existing Standard library
+first. LibreOffice must be fully closed while it runs. Re-run it any time to
+pick up changes to `src/LOESS.bas` - it's additive and idempotent, so it never
+touches your own existing macros.
 
-1. Build (or download) `CalcLoessAddin.oxt`. To build it yourself from
-   source: `./build_oxt.sh` (regenerates the `.oxt` from `src/*.bas`).
-2. In LibreOffice, go to **Tools > Extension Manager > Add...** and select
-   `CalcLoessAddin.oxt`.
-3. Restart LibreOffice. `LOESS()` is now available in every Calc document,
-   the same way `SUM()` or `TREND()` are.
+Why not a `.oxt` extension installed through the Extension Manager? That was
+the first approach here, but it turned out to be a dead end worth recording:
+**Calc's formula compiler only resolves a bare `=FUNCTION(...)` name against
+your personal "Standard" library.** A Basic library shipped inside an
+extension - regardless of what you name it, even "Standard" itself - gets
+installed, shows up in the Extension Manager, and can be run as a macro, but
+is never searched when compiling a cell formula, so `=LOESS(...)` fails with
+`#NAME?` no matter what. This was verified directly (not assumed): the exact
+same code resolves correctly the moment it's placed in the personal Standard
+library, and fails every time it's shipped via `.oxt`, independent of the
+library's name. A "real" `=FUNCTION(...)` UNO Add-In needs a compiled/scripted
+component (Python, Java, C++) implementing `com.sun.star.sheet.AddIn`, which
+is off the table given the "no Python" objective - so a Standard-library
+install is the correct solution here, not a workaround.
 
-### Option B: Import the Basic module manually
-
-1. Open **Tools > Macros > Edit Macros...** to open the Basic IDE.
-2. Under **My Macros** (or a shared library), insert a new module and paste
-   in the contents of `src/LOESS.bas`.
-3. `LOESS()` is now usable as a formula in that LibreOffice profile.
-
-Either way, once installed, run `Tools > Macros > Run Macro...` and execute
-`RunSelfTest` (from `SelfTest.bas` / the extension's second module) to sanity
-check the install - it opens a scratch spreadsheet, runs a few checks with
-analytically known answers, and reports PASS/FAIL in a dialog.
+Once installed, run **Tools > Macros > Run Macro... > My Macros > Standard >
+LOESSSelfTest > RunSelfTest** to sanity check it - it opens a scratch
+spreadsheet, runs a few checks with analytically known answers, and reports
+PASS/FAIL in a dialog.
 
 ## Usage
 
@@ -95,9 +100,11 @@ values.
 ```
 src/LOESS.bas       The add-in itself: the LOESS() function and its helpers.
 src/SelfTest.bas    Interactive self-test (Tools > Macros > Run Macro > RunSelfTest).
-oxt/                Generated extension package sources (do not edit directly - see build_oxt.sh).
-build_oxt.sh        Regenerates oxt/ and CalcLoessAddin.oxt from src/*.bas.
-CalcLoessAddin.oxt  Ready-to-install extension.
+install.sh          Installs src/*.bas into your personal Standard library. Run this.
+oxt/, build_oxt.sh, CalcLoessAddin.oxt
+                    A .oxt extension package, kept for reference. It installs
+                    and is runnable as a macro, but =LOESS(...) as a cell
+                    formula will NOT work from it - see Installation above.
 ```
 
 ## Testing notes

@@ -21,6 +21,15 @@ mkdir -p oxt/LOESS oxt/META-INF
 wrap_xba "Module1" src/LOESS.bas oxt/LOESS/Module1.xba
 wrap_xba "Module2" src/SelfTest.bas oxt/LOESS/Module2.xba
 
+# LibreOffice expects a dialog.xlb alongside script.xlb for every Basic
+# library, even when the library defines no dialogs - without it, loading
+# the library fails with "Error loading BASIC ... dialog.xlb: General Error".
+cat > oxt/LOESS/dialog.xlb <<'EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE library:library PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "library.dtd">
+<library:library xmlns:library="http://openoffice.org/2000/library" library:name="LOESS" library:readonly="false" library:passwordprotected="false"/>
+EOF
+
 rm -f CalcLoessAddin.oxt
 cd oxt
 zip -r -X ../CalcLoessAddin.oxt description.xml META-INF LOESS -x '.*' >/dev/null
