@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-07-03
+
 ### Added
 - **Real UNO Add-In implementation** (`com.example.loess`, `src/loess_impl.py`,
   `idl/com/example/loess/XLoess.idl`, `registration/`, `build_addin.sh`).
@@ -43,5 +45,6 @@ polynomial regression smoothing, implemented in pure StarBasic.
 - `examples/LOESS_Demo.ods`, a worked example workbook with a chart.
 - README documenting usage, algorithm, and performance characteristics.
 
-[Unreleased]: https://github.com/davidjayjackson/calc_loess_addin/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/davidjayjackson/calc_loess_addin/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/davidjayjackson/calc_loess_addin/compare/v1.0.0...v2.0.0
 [1.0.0]: https://github.com/davidjayjackson/calc_loess_addin/releases/tag/v1.0.0
