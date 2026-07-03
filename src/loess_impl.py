@@ -1,9 +1,7 @@
 # LOESS / LOWESS local polynomial regression smoothing, exposed as a
 # Calc spreadsheet function via a real UNO Add-In (so it appears in the
-# Function Wizard and autocomplete, unlike the Basic-macro version in
-# src/LOESS.bas). This is a faithful line-by-line port of that same
-# tested algorithm - see src/LOESS.bas for the reference implementation
-# and README.md for the full algorithm description.
+# Function Wizard and autocomplete). See README.md for the full algorithm
+# description.
 #
 # LOESS(xrange; yrange; x0; [span]; [degree]; [robust_iters])
 #
@@ -22,7 +20,7 @@ IMPL_NAME = "com.example.loess.LoessImpl.python"
 
 
 class LoessError(ValueError):
-    """Raised for invalid arguments/data, mirroring LOESS.bas's `Error 5`."""
+    """Raised for invalid LOESS arguments/data."""
 
 
 def _is_numeric(v):
