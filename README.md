@@ -69,6 +69,11 @@ Blank or non-numeric cells are handled safely: a pair is only used if *both*
 the x and y cell at that position are numeric, so a gap on one side can never
 shift the two ranges out of alignment.
 
+See [`examples/LOESS_Demo.ods`](examples/LOESS_Demo.ods) for a worked example:
+sample noisy data with a deliberate outlier, `LOESS()` dragged down two
+columns (degree 1 and 2), a robust-vs-non-robust comparison at the outlier,
+and a chart.
+
 ## Performance
 
 `RobustIters > 0` is O(n²) per formula evaluation, because deriving the
@@ -101,6 +106,8 @@ values.
 src/LOESS.bas       The add-in itself: the LOESS() function and its helpers.
 src/SelfTest.bas    Interactive self-test (Tools > Macros > Run Macro > RunSelfTest).
 install.sh          Installs src/*.bas into your personal Standard library. Run this.
+examples/LOESS_Demo.ods
+                    Sample workbook - see Usage above.
 oxt/, build_oxt.sh, CalcLoessAddin.oxt
                     A .oxt extension package, kept for reference. It installs
                     and is runnable as a macro, but =LOESS(...) as a cell
