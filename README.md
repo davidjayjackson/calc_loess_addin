@@ -1,10 +1,15 @@
 # Calc LOESS/LOWESS Add-in
 
-Objective is to create addin for Calc calculate loess or lowess without using python
-
 A LOESS/LOWESS (locally weighted polynomial regression) smoothing function for
-LibreOffice Calc, implemented entirely in LibreOffice Basic (StarBasic). No
-Python, no external libraries, no compiler - just a Basic module.
+LibreOffice Calc, available two ways:
+
+- as a **pure StarBasic macro** (`src/LOESS.bas`, the original objective - no
+  Python, no external libraries, no compiler), or
+- as a **real Python UNO Add-In** (`src/loess_impl.py`), which additionally
+  gets `LOESS` listed in the Function Wizard and formula autocomplete - not
+  achievable from a Basic macro alone.
+
+See **Installation** below for the tradeoff between the two.
 
 ## What it does
 
@@ -14,6 +19,17 @@ optionally refined with Cleveland-style robustness iterations that down-weight
 outliers. This is the same family of algorithm as R's `lowess()`/`loess()`.
 
 ## Installation
+
+There are **two** ways to install `LOESS()`, trading off a dependency on
+Python against a nicer editing experience:
+
+|                              | `install.sh` (Basic macro) | `build_addin.sh` (Python Add-In) |
+|------------------------------|----------------------------|-----------------------------------|
+| Dependencies                 | None - pure StarBasic      | LibreOffice **SDK** (`unoidl-write`) + Python |
+| `=LOESS(...)` as a formula   | ✅                          | ✅ |
+| Function Wizard / autocomplete | ❌ (see explanation below) | ✅ |
+
+### Option A: Basic macro (`install.sh`, no Python)
 
 Run `./install.sh`. It copies `src/LOESS.bas` and `src/SelfTest.bas` into your
 personal LibreOffice **Standard** Basic library
@@ -33,15 +49,49 @@ is never searched when compiling a cell formula, so `=LOESS(...)` fails with
 `#NAME?` no matter what. This was verified directly (not assumed): the exact
 same code resolves correctly the moment it's placed in the personal Standard
 library, and fails every time it's shipped via `.oxt`, independent of the
-library's name. A "real" `=FUNCTION(...)` UNO Add-In needs a compiled/scripted
-component (Python, Java, C++) implementing `com.sun.star.sheet.AddIn`, which
-is off the table given the "no Python" objective - so a Standard-library
-install is the correct solution here, not a workaround.
+library's name. See `oxt/`, `build_oxt.sh` and the committed `CalcLoessAddin.oxt`
+for that dead-end version, kept for reference.
 
 Once installed, run **Tools > Macros > Run Macro... > My Macros > Standard >
 LOESSSelfTest > RunSelfTest** to sanity check it - it opens a scratch
 spreadsheet, runs a few checks with analytically known answers, and reports
 PASS/FAIL in a dialog.
+
+A plain Basic macro used as a cell formula is resolved by name only at
+calculation time - Calc never knows its argument count or types in advance,
+so **it can never appear in the Function Wizard or in formula autocomplete**
+(those are driven by a separate registry that only real, registered UNO
+Add-Ins are enumerated into). This isn't a bug or a missing setting; it's a
+hard architectural split between "a macro that happens to be callable from a
+formula" and "a registered spreadsheet function" - hence Option B.
+
+### Option B: Python Add-In (`build_addin.sh`, gets autocomplete)
+
+A real UNO Add-In (`com.sun.star.sheet.AddIn`) *is* enumerated into that
+registry, so `LOESS` shows up in the Function Wizard (category "Add-In") and
+autocompletes as you type - but a genuine Add-In needs a compiled/scripted
+component. `src/loess_impl.py` is a faithful line-by-line Python port of
+`src/LOESS.bas` (same algorithm, same defaults, same tested numerical
+behaviour), exposed via the interface in `idl/com/example/loess/XLoess.idl`.
+
+Requires the LibreOffice **SDK** (for `unoidl-write`, which compiles the IDL
+interface into a UNO type library - no C++/Java compiler needed, just the SDK
+tool). Check `<LibreOffice install dir>/sdk/bin/unoidl-write` exists; on this
+machine that's `/usr/lib64/libreoffice/sdk/bin/unoidl-write`.
+
+```sh
+./build_addin.sh                                    # -> build/CalcLoessAddin.oxt
+unopkg add --force build/CalcLoessAddin.oxt         # install
+```
+
+Restart LibreOffice, then `=LOESS(...)` autocompletes and shows full argument
+help in the Function Wizard. If `install.sh`'s Basic macro is *also*
+installed, Calc resolves the bare `LOESS` name to the Add-In (verified
+directly: the Add-In's fully-qualified internal name shows up in
+`getFormula()` rather than the plain Basic-macro form) - so it's safe to have
+both, though Option B alone is enough once the SDK is available.
+
+Remove with `unopkg remove com.example.loess`.
 
 ## Usage
 
@@ -105,15 +155,21 @@ values.
 ## Repository layout
 
 ```
-src/LOESS.bas       The add-in itself: the LOESS() function and its helpers.
+src/LOESS.bas       The Basic add-in: the LOESS() function and its helpers.
 src/SelfTest.bas    Interactive self-test (Tools > Macros > Run Macro > RunSelfTest).
-install.sh          Installs src/*.bas into your personal Standard library. Run this.
+install.sh          Installs src/*.bas into your personal Standard library (Option A).
 examples/LOESS_Demo.ods
                     Sample workbook - see Usage above.
 oxt/, build_oxt.sh, CalcLoessAddin.oxt
-                    A .oxt extension package, kept for reference. It installs
-                    and is runnable as a macro, but =LOESS(...) as a cell
-                    formula will NOT work from it - see Installation above.
+                    The original .oxt-wrapped-Basic dead end, kept for
+                    reference - installs and is runnable as a macro, but
+                    =LOESS(...) as a cell formula does NOT work from it.
+idl/com/example/loess/XLoess.idl
+                    UNO interface for the Python Add-In (Option B).
+src/loess_impl.py   Python port of LOESS.bas implementing that interface.
+registration/       CalcAddIns.xcu / manifest.xml / description.xml for the Add-In package.
+build_addin.sh      Compiles the IDL and packages build/CalcLoessAddin.oxt (Option B).
+tools/test_addin.py End-to-end test of the Python Add-In against a headless LibreOffice.
 ```
 
 ## Testing notes

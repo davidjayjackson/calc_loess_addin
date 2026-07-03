@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<oor:component-data
+    xmlns:oor="http://openoffice.org/2001/registry"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    oor:name="CalcAddIns" oor:package="org.openoffice.Office">
+  <node oor:name="AddInInfo">
+    <node oor:name="com.example.loess.LoessImpl" oor:op="replace">
+      <node oor:name="AddInFunctions">
+        <node oor:name="loess" oor:op="replace">
+          <prop oor:name="DisplayName">
+            <value xml:lang="en">LOESS</value>
+          </prop>
+          <prop oor:name="Description">
+            <value xml:lang="en">Fits a local polynomial (LOESS/LOWESS) smoother and evaluates it at x0.</value>
+          </prop>
+          <prop oor:name="Category">
+            <value>Add-In</value>
+          </prop>
+          <prop oor:name="CompatibilityName">
+            <value xml:lang="en">LOESS</value>
+          </prop>
+          <node oor:name="Parameters">
+            <node oor:name="xdata" oor:op="replace">
+              <prop oor:name="DisplayName">
+                <value xml:lang="en">xrange</value>
+              </prop>
+              <prop oor:name="Description">
+                <value xml:lang="en">Range (or single cell) of sample x-values.</value>
+              </prop>
+            </node>
+            <node oor:name="ydata" oor:op="replace">
+              <prop oor:name="DisplayName">
+                <value xml:lang="en">yrange</value>
+              </prop>
+              <prop oor:name="Description">
+                <value xml:lang="en">Range (or single cell) of sample y-values, same shape as xrange.</value>
+              </prop>
+            </node>
+            <node oor:name="x0" oor:op="replace">
+              <prop oor:name="DisplayName">
+                <value xml:lang="en">x0</value>
+              </prop>
+              <prop oor:name="Description">
+                <value xml:lang="en">The x-value at which to evaluate the smoothed curve.</value>
+              </prop>
+            </node>
+            <node oor:name="span" oor:op="replace">
+              <prop oor:name="DisplayName">
+                <value xml:lang="en">span</value>
+              </prop>
+              <prop oor:name="Description">
+                <value xml:lang="en">Optional. Fraction of data used per local fit (0 &lt; span &lt;= 1 nearest-neighbour, span &gt; 1 widens the bandwidth). Default 0.6667.</value>
+              </prop>
+            </node>
+            <node oor:name="degree" oor:op="replace">
+              <prop oor:name="DisplayName">
+                <value xml:lang="en">degree</value>
+              </prop>
+              <prop oor:name="Description">
+                <value xml:lang="en">Optional. Degree of the local polynomial: 0, 1 (default) or 2.</value>
+              </prop>
+            </node>
+            <node oor:name="robustIters" oor:op="replace">
+              <prop oor:name="DisplayName">
+                <value xml:lang="en">robust_iters</value>
+              </prop>
+              <prop oor:name="Description">
+                <value xml:lang="en">Optional. Number of Cleveland-style robustness iterations. Default 0.</value>
+              </prop>
+            </node>
+          </node>
+        </node>
+      </node>
+    </node>
+  </node>
+</oor:component-data>

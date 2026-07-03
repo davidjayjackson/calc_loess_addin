@@ -1,0 +1,49 @@
+#include <com/sun/star/uno/XInterface.idl>
+
+module com { module example { module loess {
+
+    /** Add-in interface for the LOESS Calc function. */
+    interface XLoess
+    {
+        interface ::com::sun::star::uno::XInterface;
+
+        /** Fit a local polynomial (LOESS/LOWESS) smoother and evaluate it at x0.
+
+            @param xdata
+                the sample x-values, passed by Calc as a matrix (rows of
+                columns). A single cell arrives as a 1x1 matrix.
+
+            @param ydata
+                the sample y-values, same shape as xdata.
+
+            @param x0
+                the x-value at which to evaluate the smoothed curve.
+
+            @param span
+                optional. Fraction of the data used in each local fit.
+                0 &lt; span &lt;= 1 selects the nearest span*N points; span &gt; 1
+                uses all points with a widened bandwidth. Declared as
+                <em>any</em> so it may be omitted. Defaults to 0.6667.
+
+            @param degree
+                optional. Degree of the local polynomial: 0, 1 (default) or 2.
+                Declared as <em>any</em> so it may be omitted.
+
+            @param robustIters
+                optional. Number of Cleveland-style robustness (bisquare)
+                iterations. Declared as <em>any</em> so it may be omitted.
+                Defaults to 0.
+
+            @returns
+                the smoothed y-value at x0.
+         */
+        double loess(
+            [in] sequence< sequence< any > > xdata,
+            [in] sequence< sequence< any > > ydata,
+            [in] double x0,
+            [in] any span,
+            [in] any degree,
+            [in] any robustIters );
+    };
+
+}; }; };
